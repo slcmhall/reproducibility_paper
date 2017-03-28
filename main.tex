@@ -16,10 +16,12 @@
 
 \begin{document}
 \maketitle
-\abstract{This paper describes our SC16 Student Cluster Competition team's efforts to reproduce the results of
+\begin{abstract}
+This paper describes our SC16 Student Cluster Competition team's efforts to reproduce the results of
 an SC15 paper for an application called ParConnect.  This application finds connected components in graphs, specifically for De Bruijn graphs used in metagenomic assembly. We performed experiments running this application on a Dell PowerEdge cluster with Nvidia P100 GPus and an Intel Omni-Path interconnect. Our results demonstrated that we could reproduce some but not all of the performance claims in the
 original publication.  We expect that small data set sizes and differences in our cluster configuration account for the variation
-in results.}
+in results.
+\end{abstract}
 
 \section{Introduction}
 The ability to reproduce scientific computing results is essential to advancing algorithms and optimizations suitable for high-performance
@@ -59,7 +61,7 @@ has two Dell PowerEdge C1430 nodes. Each node has two Intel Xeon E5-2640 v4 CPUs
  \section{Results}
 The data sets we used are shown in Table~\ref{tab:datasets}.  These were the only provided data sets small enough to run on our cluster.  
 % First table
-\begin{figure}[htp]
+\begin{table}[htp]
 \centering
 \label{tab:counts}
 \begin{tabular}{l|c|c|}
@@ -98,5 +100,8 @@ For the scaling study, we can clearly see that the na{\"i}ve algorithm takes app
 \section{Conclusion}
    Many of the claims in the paper were reproduced in this study. The active partition algorithm does reduce the number of work items per process as claimed in the paper. Figure 1 shows that this approach improves performance relative to the na{\"i}ve algorithm. Figure 3 shows that the algorithm balances the load of tuples between the processes as seen in the AP\_LB plot. We also see in the scaling study that the runtimes decrease as we move from the na{\"i}ve algorithm to the active partition algorithm, and another improvement when moving to the active partition with load balancing algorithm.
    In the scaling study, we did not witness a significant speed up when moving from AP to AP\_LB. This could be caused by a number of factors. It is possible the data set is too small to benefit from the load balancing approach, or the data set's components are constructed in such a way that load balancing does not help. Another possible cause is the specific configuration of our machine. We have two high bandwidth paths between each socket, requiring at most one hop across the Intel QuickPath Interconnect to get data to a socket on another node. Our machine is not like the machine used in the paper where there were a number of machines used and MPI communication latencies and bandwidth may be constrained. Our cluster could be concealing the cost of the MPI communication versus computation time. For 8 MPI ranks on iteration six, AP has min, mean, max tuples of 5410, 153231, 944395 respectively. For comparison, AP\_LB has 153231 active tuples on iteration 6 with 8 MPI ranks. The time to get from iteration 6 to iteration 7 is .4s and .08s respectively. Consistent with the maximum tuple load in AP being approximately 5 times higher than the maximum load of AP\_LB. From iteration 7 the algorithm quickly ends, and this is likely why we are not seeing the promised speed up from load balancing.
+
+\bibliographystyle{alpha}
+\bibliography{main}
 
 \end{document}  
